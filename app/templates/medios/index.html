@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
+
+
+{% endblock styles %}
+
+{% block content %}
+
+    {% include "header.html" %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {#    SideBar      #}
+            {% include "sidebar.html" %}
+
+            {#Container principal#}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5 scrollarea">
+                <div class="container mt-3 ">
+                    <h1 class="fs-5">medioses</h1>
+                </div>
+
+                <!--------------------------------------------------------------------------------------
+                    -----------------TABLA CON RESULTADOS DE LAS MEDIOS BÁSICOS------------------------------------
+                    -------------------------------------------------------------------------------------------->
+
+                {% comment %} ----------------------------------------------------------------------------
+                -------------------------------BOTON INSERTAR medios------------------------------------
+                ---------------------------------------------------------------------------{% endcomment %}
+                {% if perms.bugfinder.add_mediobasico %}
+                    <div class="p-1">
+                        <!-- Botón INSERTAR medios -->
+                        <a type="button" href="{% url 'add_medio' %}"
+                           class="btn p-0 border me-2  "
+                           style="background-color: white"
+                           title="Insertar nueva medios">
+                            <button class="btn rounded-0">
+                                <img class="" src="{% static 'imag/bootstrap-icons/plus-circle.svg' %}"
+                                     alt="Insertar Medio Básico" width="16" height="16">
+                                Añadir Medio Básico
+                            </button>
+                        </a>
+                    </div>
+                {% endif %}
+                <!--------------------------------------------------------------------------------------
+               -----------------FIN BOTON INSERTAR medios ------------------------------------
+               -------------------------------------------------------------------------------------------->
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="mediosTable" class="table table-hover table-sm ">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-center" style="width: 50%">Medio Básico</th>
+                                    <th scope="col" class="text-center" style="width: 15%">Tipo</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Local</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Estado</th>
+                                    {% if perms.app.change_medios or perms.app.delete_medios %}
+                                        <th scope="col" class="text-center" style="width: 10%">Opciones</th>
+                                    {% endif %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% csrf_token %}
+
+
+                                {% for medios in object_list %}
+                                    <tr>
+                                        <td class="text-center">{{ medios.mb | escape }}</td>
+                                        <td class="text-center">{{ medios.tipo | escape }}</td>
+                                        <td class="text-center">{{ medios.local.nombre | escape }}</td>
+                                        <td class="text-center">{{ medios.estado | escape }}</td>
+                                        {% if perms.app.change_medios or perms.app.delete_medios %}
+                                            <td>
+                                                {% if perms.bugfinder.change_mediobasico %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none" title="Editar"
+                                                       href="{% url 'editar_medio' medios.id %}">
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/pen.svg' %}"
+                                                             alt="Modificar" width="14" height="14">
+                                                    </a>
+                                                {% endif %}
+                                                {% if perms.bugfinder.delete_mediobasico %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none"
+                                                       title="Eliminar"
+                                                       href="{% url 'eliminar_medio' medios.id %}">
+
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/trash.svg' %}"
+                                                             alt="Eliminar" width="14" height="14">
+
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         <!--------------------------------------------------------------------------------------
+           -----------------TABLA CON RESULTADOS DE LOS MEDIOS BÁSICOS------------------------------------
+           -------------------------------------------------------------------------------------------->
+        </main>
+
+
+    </div>
+    </div>
+
+
+    {#    {% include "footer.html" %}#}
+{% endblock content %}
+
+{% block scripts %}
+    {% if messages %}
+        {% for msg in messages %}
+            <script>
+                Swal.fire({'title' : "¡Hecho!" , "text" : "{{msg}}", "icon": "success"})
+            </script>
+        {% endfor %}
+    {% endif %}
+    <script type="application/javascript">
+        $(function () {
+            $('#mediosTable').DataTable({
+                responsive: true,
+                "language": {
+                    url: '{% static 'lib/es-ES.json ' %}'
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

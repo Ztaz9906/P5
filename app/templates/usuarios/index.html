@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
+
+
+{% endblock styles %}
+
+{% block content %}
+
+    {% include "header.html" %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {#    SideBar      #}
+            {% include "sidebar.html" %}
+
+            {#Container principal#}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5 scrollarea">
+                <div class="container mt-3 ">
+                    <h1 class="fs-5">Usuarios</h1>
+                </div>
+
+                <!--------------------------------------------------------------------------------------
+                    -----------------TABLA CON RESULTADOS DE LAS usuarioES------------------------------------
+                    -------------------------------------------------------------------------------------------->
+
+                {% comment %} ----------------------------------------------------------------------------
+                -------------------------------BOTON INSERTAR usuario------------------------------------
+                ---------------------------------------------------------------------------{% endcomment %}
+                {% if perms.bugfinder.add_usuario %}
+                    <div class="p-1">
+                        <!-- Botón INSERTAR usuario -->
+                        <a type="button" href="{% url 'add_user' %}"
+                           class="btn p-0 border me-2  "
+                           style="background-color: white"
+                           title="Insertar nueva usuario">
+                            <button class="btn rounded-0">
+                                <img class="" src="{% static 'imag/bootstrap-icons/plus-circle.svg' %}"
+                                     alt="Insertar usuario" width="16" height="16">
+                                Añadir Usuario
+                            </button>
+                        </a>
+                    </div>
+                {% endif %}
+                <!--------------------------------------------------------------------------------------
+               -----------------FIN BOTON INSERTAR USUARIO ------------------------------------
+               -------------------------------------------------------------------------------------------->
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="usuarioTable" class="table table-hover table-sm ">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-center" style="width: 50%">Nombre</th>
+                                    <th scope="col" class="text-center" style="width: 50%">Apellido</th>
+                                    <th scope="col" class="text-center" style="width: 15%">Teléfono</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Carnet Identidad</th>
+                                    {% if perms.app.change_usuario or perms.app.delete_usuario %}
+                                        <th scope="col" class="text-center" style="width: 10%">Opciones</th>
+                                    {% endif %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% csrf_token %}
+                                {% for usuario in object_list %}
+                                    <tr>
+                                        <td class="text-center">{{ usuario.name | escape }}</td>
+                                        <td class="text-center">{{ usuario.apellidos | escape }}</td>
+                                        <td class="text-center">{{ usuario.tfno | escape }}</td>
+                                        <td class="text-center">{{ usuario.ci | escape }}</td>
+                                        {% if perms.app.change_usuario or perms.app.delete_usuario %}
+                                            <td>
+                                                {% if perms.bugfinder.change_usuario %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none" title="Editar"
+                                                       href="{% url 'editar_user' usuario.id %}">
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/pen.svg' %}"
+                                                             alt="Modificar" width="14" height="14">
+                                                    </a>
+                                                {% endif %}
+                                                {% if perms.bugfinder.delete_usuario %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none"
+                                                       title="Eliminar"
+                                                       href="{% url 'eliminar_user' usuario.id %}">
+
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/trash.svg' %}"
+                                                             alt="Eliminar" width="14" height="14">
+
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         <!--------------------------------------------------------------------------------------
+           -----------------TABLA CON RESULTADOS DE LAS usuarioES------------------------------------
+           -------------------------------------------------------------------------------------------->
+        </main>
+
+
+    </div>
+    </div>
+
+
+    {#    {% include "footer.html" %}#}
+{% endblock content %}
+
+{% block scripts %}
+    {% if messages %}
+        {% for msg in messages %}
+            <script>
+                Swal.fire({'title' : "¡Hecho!" , "text" : "{{msg}}", "icon": "success"})
+            </script>
+        {% endfor %}
+    {% endif %}
+    <script type="application/javascript">
+        $(function () {
+            $('#usuarioTable').DataTable({
+                responsive: true,
+                "language": {
+                    url: '{% static 'lib/es-ES.json ' %}'
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

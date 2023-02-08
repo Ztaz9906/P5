@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    {% include "header.html" %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {# SideBar #}
+
+            {% include "sidebar.html" %}
+
+            {#Container principal#}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5 scrollarea">
+                <div class="container mt-3">
+                    <h1 class="fs-5">{{ title }}</h1>
+                </div>
+                <!--------------------------------------------------------------------------------------
+                   -----------------TABLA CON RESULTADOS DE LAS ENTIDADES------------------------------------
+                   -------------------------------------------------------------------------------------------->
+                <div class="container mb-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="." method="post"
+                                  id="form_insertar_entidad">
+                                {% csrf_token %}
+
+                                {% if form.errors %}
+                                    <div class="alert alert-danger sm mb-3 p-2" role="alert">
+                                        <h6>Ha ocurrido un error al intentar guardar la entidad</h6>
+                                    </div>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <!--IMPUT NOMBRE ENTIDAD-->
+                                        <div class=" mb-4 position-relative">
+
+                                            <label class="form-label">Medio Básico:</label>
+                                                {{form.mb}}
+                                            {% if form.mb.errors %}
+                                                <div class="alert alert-danger sm m-1 p-2 small" role="alert">
+                                                    {% for error in form.mb.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4 position-relative">
+                                            <label for="{{ form.telefonoEntidad.id_for_label }}"
+                                                   class="form-label">Tipo:</label>
+                                                   {{form.tipo}}
+                                            {% if form.tipo.errors %}
+                                                <div class="alert alert-danger sm m-1 p-2 small" role="alert">
+                                                    {% for error in form.tipo.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4 position-relative">
+                                            <label class="form-label">Local:</label>
+                                                   {{form.local}}
+                                            {% if form.local.errors %}
+                                                <div class="alert alert-danger sm m-1 p-2 small" role="alert">
+                                                    {% for error in form.local.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4 position-relative">
+                                            <label class="form-label">Estado:</label>
+                                                   {{form.estado}}
+                                            {% if form.estado.errors %}
+                                                <div class="alert alert-danger sm m-1 p-2 small" role="alert">
+                                                    {% for error in form.estado.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" position-relative">
+                                    <a class="text-decoration-none" href="{% url 'medio'%}">
+                                        <button type="button"
+                                                class="btn btn-secondary rounded-0"
+                                                data-bs-dismiss="modal">Cancelar
+                                        </button>
+                                    </a>
+
+                                    <button type="submit" class="btn btn-success rounded-0" id="btnappend">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+
+
+        </div>
+    </div>
+
+
+    {#    {% include "footer.html" %}#}
+{% endblock content %}
+
+{% block scripts %}
+
+
+    <script type="application/javascript">
+        $(function () {
+            $('#entidadTable').DataTable({
+                responsive: true,
+                "language": {
+                    url: '{% static 'lib/es-ES.json ' %}'
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

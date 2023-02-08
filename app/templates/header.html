@@ -1,0 +1,48 @@
+{% load static %}
+{% load grupo_tag %}
+<!--Cabecera-->
+
+<header id="header" class="navbar sticky-top bg-white   flex-md-nowrap pe-3 py-0 align-items-center border-bottom ">
+
+    <a class="logo  col-md-3 col-lg-2  ps-5 align-items-center fs-1 text-decoration-none" href="{% url 'principal' %}"> <span
+            class="h5">SistMB</span></a>
+    <button class="navbar-toggler  d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-nav">
+
+        <div class="nav-item text-nowrap d-flex flex-wrap align-items-center">
+
+            <ul class="nav mb-md-0 ">
+                <!--user-->
+                <li>
+                    <div class="p-1">
+                        <span class="me-2"><strong>{{request.user.name}} {{request.user.apellidos}}-
+                            {%if request.user.if_staff%}
+                            SuperAdmin
+                            {%endif%}
+                            {%if request.user|has_group:"Administrador"%}
+                            Administrador
+                            {%endif%}
+                            {%if request.user|has_group:"Jefe de Area"%}
+                            Jefe de Area
+                            {%endif%}
+                            {%if request.user|has_group:"Vicedecano"%}
+                            Vicedecano
+                            {%endif%}
+                        </strong></span>
+                    </div>
+                </li>
+
+                <li class="ms-3">
+                    <a class="" href="{% url 'logout' %}" id="logout" title="Salir">
+                        <img src=" {% static  'imag/bootstrap-icons/power.svg' %}" alt="Desconectarse"
+                             class="rounded-circle" width="24" height="24">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

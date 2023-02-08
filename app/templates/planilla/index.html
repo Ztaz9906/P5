@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
+
+
+{% endblock styles %}
+
+{% block content %}
+
+    {% include "header.html" %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {#    SideBar      #}
+            {% include "sidebar.html" %}
+
+            {#Container principal#}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5 scrollarea">
+                <div class="container mt-3 ">
+                    <h1 class="fs-5">Planillas</h1>
+                </div>
+
+                <!--------------------------------------------------------------------------------------
+                    -----------------TABLA CON RESULTADOS DE LAS PLANILLAS------------------------------------
+                    -------------------------------------------------------------------------------------------->
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="planillaTable" class="table table-hover table-sm ">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-center" style="width: 10%">No° Planilla</th>
+                                    <th scope="col" class="text-center" style="width: 10%">Local</th>
+                                    <th scope="col" class="text-center" style="width: 15%">Fecha</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Faltante</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Sobrante</th>
+                                    <th scope="col" class="text-center" style="width: 25%">Estado</th>
+                                    {% if perms.app.change_planilla or perms.app.delete_planilla %}
+                                        <th scope="col" class="text-center" style="width: 10%">Opciones</th>
+                                    {% endif %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% csrf_token %}
+                                {% for planilla in object_list %}
+                                    <tr>
+                                        <td class="text-center">{{ planilla.local.id | escape }}</td>
+                                        <td class="text-center">{{ planilla.local | escape }}</td>
+                                        <td class="text-center">{{ planilla.fecha | escape }}</td>
+                                        <td class="text-center">{{ planilla.faltante | escape }}</td>
+                                        <td class="text-center">{{ planilla.sobrante | escape }}</td>
+                                        <td class="text-center">{{ planilla.estado | escape }}</td>
+                                        {% if perms.app.change_planilla or perms.app.delete_planilla %}
+                                            <td>
+                                                {% if perms.bugfinder.change_planilla %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none" title="Editar"
+                                                       href="{% url 'editar_planilla' planilla.local.id%}">
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/pen.svg' %}"
+                                                             alt="Modificar" width="14" height="14">
+                                                    </a>
+                                                {% endif %}
+                                                {% if perms.bugfinder.delete_planilla %}
+                                                    <a id="" class=" mx-1 px-1 text-decoration-none"
+                                                       title="Detalles"
+                                                       href="{% url 'detalles_planilla' planilla.local.id %}">
+                                                        <img class=""
+                                                             src="{% static 'imag/bootstrap-icons/details-4.svg' %}"
+                                                             alt="Eliminar" width="14" height="14">
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         <!--------------------------------------------------------------------------------------
+           -----------------TABLA CON RESULTADOS DE LAS planillaES------------------------------------
+           -------------------------------------------------------------------------------------------->
+        </main>
+
+
+    </div>
+    </div>
+
+
+    {#    {% include "footer.html" %}#}
+{% endblock content %}
+
+{% block scripts %}
+    {% if messages %}
+        {% for msg in messages %}
+            <script>
+                Swal.fire({'title' : "¡Hecho!" , "text" : "{{msg}}", "icon": "success"})
+            </script>
+        {% endfor %}
+    {% endif %}
+    <script type="application/javascript">
+        $(function () {
+            $('#planillaTable').DataTable({
+                responsive: true,
+                "language": {
+                    url: '{% static 'lib/es-ES.json ' %}'
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

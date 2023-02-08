@@ -1,0 +1,61 @@
+{% load static %}
+{% load grupo_tag %}
+{#NavBar#}
+<nav id="sidebarMenu" class="sidebar col-md-3 col-lg-2 d-md-block shadow collapse scrollarea">
+    <div class="position-sticky p-3">
+        <ul class="nav flex-column sidebar-nav">
+            {% if request.user|has_group:"Jefe de Area" or request.user.if_staff %}
+                <li class="nav-item ">
+                    <a class="nav-link {% if request.path == '/MedioBasico/' %}active{% endif %}"
+                       href="{% url 'medio'%}">
+                       <img class=""src="{% static 'imag/bootstrap-icons/box-svgrepo-com.svg' %}"alt="Eliminar" width="24" height="24">
+                        <span class="">Medios Básicos</span>
+                    </a>
+                </li>
+                <div class="col ps-0">
+                    <hr class="mb-0 ">
+                </div>
+            {% endif %}
+            {% if request.user|has_group:"Vicedecano" or request.user.if_staff %}
+            <li class="nav-item  mt-1 ">
+                <a class="nav-link d-flex align-items-center {% if request.path == '/Planilla/' %}active{% endif %}"
+                   href="{% url 'planilla' %}">
+                   <img class=""src="{% static 'imag/bootstrap-icons/list-task-list-task-tasklist-checklist-check-editor-svgrepo-com.svg' %}"alt="Eliminar" width="24" height="24">
+                    <span class="fs-7 text-center">Planillas</span>
+                </a>
+            </li>
+            <div class="col ps-0">
+                <hr class="mb-0 ">
+            </div>
+            {%endif%}
+
+            {% if request.user|has_group:"Administrador" or request.user.if_staff %}
+            <li class="nav-item  mt-1 ">
+                <a class="nav-link d-flex align-items-center {% if request.path == '/Usuario/' %}active{% endif %}"
+                   href="{%url 'user'%}">
+                   <img class=""src="{% static 'imag/bootstrap-icons/user-check-filled-svgrepo-com.svg' %}"alt="Eliminar" width="24" height="24">
+                    <span class="fs-7 text-center">Usuarios</span>
+                </a>
+            </li>
+            <div class="col ps-0">
+                <hr class="mb-0 ">
+            </div>
+            {%endif%}
+               
+            {% if request.user|has_group:"Jefe de Area" or request.user.if_staff %}
+            <li class="nav-item  mt-1 ">
+                <a class="nav-link d-flex align-items-center {% if request.path == '/local/' %}active{% endif %}"
+                   href="{%url 'local'%}">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="CurrentColor"
+                   class="bi bi-building" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                        d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                  <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                    </svg>
+                    <span class="fs-7 text-center">Local</span>
+                </a>
+            </li>
+            {%endif%}
+        </ul>
+    </div>
+</nav>

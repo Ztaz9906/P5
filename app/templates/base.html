@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=yes'>
+    <meta name="description" content="Descripción de la aplicación web">
+    {% block head %}
+    {% endblock %}
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-5.2.2/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/DataTables/DataTables-1.12.1/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebars.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/DataTables/responsive/2.3.0/css/responsive.bootstrap5.min.css' %}">
+    {% block styles %}
+    {% endblock %}
+</head>
+
+<body {% block bodyclass %}{% endblock %}>
+
+{% block content %}
+
+{% endblock %}
+
+<!--SCRIPTS-->
+<script src="{% static 'lib/bootstrap-5.2.2/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'lib/jquery-3.6.1.min.js' %}"></script>
+{#DataTables#}
+<script src="{% static 'lib/DataTables/DataTables-1.12.1/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'lib/DataTables/responsive/2.3.0/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/funciones.js' %}"></script>
+<script src="{% static 'js/sweetalert2@11.js' %}"></script>
+
+
+{% block scripts %}
+{% endblock scripts %}
+</body>
+</html>

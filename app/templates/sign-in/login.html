@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block styles %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block bodyclass %} class="text-center"{% endblock %}
+
+{% block content %}
+
+    <main class="form-signin w-100 m-auto shadow">
+        <div class="h1 mb-5">Inicio de sesión</div>
+        <div class="container">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Iniciar sesión</button>
+            </form>
+            <p class="mt-5 mb-3 text-muted"> Sistema informático para la gestión de Medios Básicos de la facultad 4<br> © 2022</p>
+        </div>
+    </main>
+
+{% endblock %}
+
+
+
